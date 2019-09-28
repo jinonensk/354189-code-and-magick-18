@@ -40,6 +40,18 @@ var renderModal = function (ctx, x, y, color) {
   ctx.fill();
 };
 
+var renderRectangle = function (ctx, x, y, width, height, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, width, height);
+};
+
+var renderText = function (ctx, text, x, y, color) {
+  ctx.font = FONT_STYLE;
+  ctx.textBaseline = FONT_BASELINE;
+  ctx.fillStyle = color || END_MODAL.TEXT_COLOR;
+  ctx.fillText(text, x, y);
+};
+
 var renderGistogramColumn = function (ctx, ratio, index, name, time) {
   var maxHeight = GISTOGRAM.HEIGHT - GISTOGRAM.TEXT_HEIGHT;
   var height = maxHeight * ratio;
@@ -47,11 +59,10 @@ var renderGistogramColumn = function (ctx, ratio, index, name, time) {
   var columnY = END_MODAL.START_Y + END_MODAL.HEIGHT - END_MODAL.INNER_GAP - height - GISTOGRAM.TEXT_HEIGHT;
   var otherPlayersColor = 'hsl(240,' + Math.floor(Math.random() * 100) + '%, 50%)';
   var color = name === GISTOGRAM.MAIN_PLAYER ? GISTOGRAM.MAIN_COLOR : otherPlayersColor;
-  ctx.fillText(time, columnX, columnY - GISTOGRAM.INNER_GAP);
-  ctx.fillStyle = color;
-  ctx.fillRect(columnX, columnY, GISTOGRAM.COLUMN_WIDTH, height);
-  ctx.fillStyle = END_MODAL.TEXT_COLOR;
-  ctx.fillText(name, columnX, columnY + height + GISTOGRAM.INNER_GAP);
+
+  renderText(ctx, time, columnX, columnY - GISTOGRAM.INNER_GAP);
+  renderRectangle(ctx, columnX, columnY, GISTOGRAM.COLUMN_WIDTH, height, color);
+  renderText(ctx, name, columnX, columnY + height + GISTOGRAM.INNER_GAP);
 };
 
 var getMaxElement = function (array) {
@@ -73,11 +84,8 @@ var renderStatistics = function (ctx, names, times) {
   renderModal(ctx, shadowX, shadowY, END_MODAL.SHADOW_COLOR);
   renderModal(ctx, END_MODAL.START_X, END_MODAL.START_Y, END_MODAL.BACKGORUND_COLOR);
 
-  ctx.font = FONT_STYLE;
-  ctx.textBaseline = FONT_BASELINE;
-  ctx.fillStyle = END_MODAL.TEXT_COLOR;
-  ctx.fillText('Ура вы победили!', END_MODAL.START_X + END_MODAL.INNER_GAP, END_MODAL.START_Y + END_MODAL.INNER_GAP);
-  ctx.fillText('Список результатов:', END_MODAL.START_X + END_MODAL.INNER_GAP, 60);
+  renderText(ctx, 'Ура вы победили!', END_MODAL.START_X + END_MODAL.INNER_GAP, END_MODAL.START_Y + END_MODAL.INNER_GAP);
+  renderText(ctx, 'Список результатов:', END_MODAL.START_X + END_MODAL.INNER_GAP, 60);
 
   for (var i = 0; i < names.length; i++) {
     var rate = times[i] / maxElement;
