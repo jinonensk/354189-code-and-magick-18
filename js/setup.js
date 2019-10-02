@@ -19,15 +19,11 @@ var getRandomValue = function (min, max) {
 };
 
 var makeWizard = function () {
-  var firstNameIndex = getRandomValue(0, FIRST_NAMES.length);
-  var lastNameIndex = getRandomValue(0, LAST_NAMES.length);
-  var coatColorsIndex = getRandomValue(0, COAT_COLORS.length);
-  var eyesColorsIndex = getRandomValue(0, EYES_COLORS.length);
-  var fullName = FIRST_NAMES[firstNameIndex] + ' ' + LAST_NAMES[lastNameIndex];
+  var fullName = FIRST_NAMES[getRandomValue(0, FIRST_NAMES.length)] + ' ' + LAST_NAMES[getRandomValue(0, LAST_NAMES.length)];
   var wizard = {
     name: fullName,
-    coatColor: COAT_COLORS[coatColorsIndex].replace(/\s+/g, ''),
-    eyesColor: EYES_COLORS[eyesColorsIndex],
+    coatColor: COAT_COLORS[getRandomValue(0, COAT_COLORS.length)],
+    eyesColor: EYES_COLORS[getRandomValue(0, EYES_COLORS.length)],
   };
   return wizard;
 };
