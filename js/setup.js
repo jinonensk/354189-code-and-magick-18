@@ -64,6 +64,7 @@ var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
 var wizardEyesInput = document.querySelector('[name=\'eyes-color\']');
 var wizardFireball = document.querySelector('.setup-fireball-wrap');
 var wizardFireballInput = document.querySelector('[name=\'fireball-color\']');
+var userName = document.querySelector('.setup-user-name');
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -77,6 +78,10 @@ var openPopup = function () {
 };
 
 var closePopup = function () {
+  if (document.activeElement === userName) {
+    return;
+  }
+
   userDialog.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
 };
