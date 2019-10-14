@@ -1,95 +1,74 @@
 'use strict';
-var END_MODAL = {
-  START_X: 100,
-  START_Y: 10,
-  WIDTH: 420,
-  HEIGHT: 270,
-  INWARD_SHIFT: 20,
-  SHADOW_OFFSET: 10,
-  INNER_GAP: 30,
-  SHADOW_COLOR: 'rgba(0, 0, 0, 0.7)',
-  BACKGORUND_COLOR: '#FFFFFF',
-  TEXT_COLOR: 'rgb(0, 0, 0)',
-};
+(function () {
+  var CONST = window.CONST;
 
-var FONT_STYLE = '16px PT Mono';
-var FONT_BASELINE = 'middle';
+  var renderModal = function (ctx, x, y, color) {
+    ctx.beginPath();
+    ctx.moveTo(x, CONST.END_MODAL.START_Y);
+    ctx.lineTo(x + CONST.END_MODAL.WIDTH / 2, y + CONST.END_MODAL.INWARD_SHIFT);
+    ctx.lineTo(x + CONST.END_MODAL.WIDTH, y);
+    ctx.lineTo(x + CONST.END_MODAL.WIDTH - CONST.END_MODAL.INWARD_SHIFT, y + CONST.END_MODAL.HEIGHT / 2);
+    ctx.lineTo(x + CONST.END_MODAL.WIDTH, y + CONST.END_MODAL.HEIGHT);
+    ctx.lineTo(x, y + CONST.END_MODAL.HEIGHT);
+    ctx.lineTo(x + CONST.END_MODAL.INWARD_SHIFT, y + CONST.END_MODAL.HEIGHT / 2);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
 
-var GISTOGRAM = {
-  HEIGHT: 150,
-  COLUMN_WIDTH: 50,
-  INNER_GAP: 15,
-  TEXT_HEIGHT: 20,
-  CULUMN_MARGIN: 50,
-  MAIN_PLAYER: 'Вы',
-  MAIN_COLOR: 'rgba(255, 0, 0, 1)',
-};
+  var renderRectangle = function (ctx, x, y, width, height, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
+  };
 
-var renderModal = function (ctx, x, y, color) {
-  ctx.beginPath();
-  ctx.moveTo(x, END_MODAL.START_Y);
-  ctx.lineTo(x + END_MODAL.WIDTH / 2, y + END_MODAL.INWARD_SHIFT);
-  ctx.lineTo(x + END_MODAL.WIDTH, y);
-  ctx.lineTo(x + END_MODAL.WIDTH - END_MODAL.INWARD_SHIFT, y + END_MODAL.HEIGHT / 2);
-  ctx.lineTo(x + END_MODAL.WIDTH, y + END_MODAL.HEIGHT);
-  ctx.lineTo(x, y + END_MODAL.HEIGHT);
-  ctx.lineTo(x + END_MODAL.INWARD_SHIFT, y + END_MODAL.HEIGHT / 2);
-  ctx.closePath();
-  ctx.stroke();
-  ctx.fillStyle = color;
-  ctx.fill();
-};
+  var renderText = function (ctx, text, x, y, color) {
+    ctx.font = CONST.FONT_STYLE;
+    ctx.textBaseline = CONST.FONT_BASELINE;
+    ctx.fillStyle = color || CONST.END_MODAL.TEXT_COLOR;
+    ctx.fillText(text, x, y);
+  };
 
-var renderRectangle = function (ctx, x, y, width, height, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(x, y, width, height);
-};
+  var renderGistogramColumn = function (ctx, ratio, index, name, time) {
+    var maxHeight = CONST.GISTOGRAM.HEIGHT - CONST.GISTOGRAM.TEXT_HEIGHT;
+    var height = maxHeight * ratio;
+    var columnX = CONST.END_MODAL.START_X + CONST.END_MODAL.INNER_GAP + (CONST.GISTOGRAM.COLUMN_WIDTH + CONST.GISTOGRAM.CULUMN_MARGIN) * index;
+    var columnY = CONST.END_MODAL.START_Y + CONST.END_MODAL.HEIGHT - CONST.END_MODAL.INNER_GAP - height - CONST.GISTOGRAM.TEXT_HEIGHT;
+    var otherPlayersColor = 'hsl(240,' + Math.floor(Math.random() * 100) + '%, 50%)';
+    var color = name === CONST.GISTOGRAM.MAIN_PLAYER ? CONST.GISTOGRAM.MAIN_COLOR : otherPlayersColor;
 
-var renderText = function (ctx, text, x, y, color) {
-  ctx.font = FONT_STYLE;
-  ctx.textBaseline = FONT_BASELINE;
-  ctx.fillStyle = color || END_MODAL.TEXT_COLOR;
-  ctx.fillText(text, x, y);
-};
+    renderText(ctx, time, columnX, columnY - CONST.GISTOGRAM.INNER_GAP);
+    renderRectangle(ctx, columnX, columnY, CONST.GISTOGRAM.COLUMN_WIDTH, height, color);
+    renderText(ctx, name, columnX, columnY + height + CONST.GISTOGRAM.INNER_GAP);
+  };
 
-var renderGistogramColumn = function (ctx, ratio, index, name, time) {
-  var maxHeight = GISTOGRAM.HEIGHT - GISTOGRAM.TEXT_HEIGHT;
-  var height = maxHeight * ratio;
-  var columnX = END_MODAL.START_X + END_MODAL.INNER_GAP + (GISTOGRAM.COLUMN_WIDTH + GISTOGRAM.CULUMN_MARGIN) * index;
-  var columnY = END_MODAL.START_Y + END_MODAL.HEIGHT - END_MODAL.INNER_GAP - height - GISTOGRAM.TEXT_HEIGHT;
-  var otherPlayersColor = 'hsl(240,' + Math.floor(Math.random() * 100) + '%, 50%)';
-  var color = name === GISTOGRAM.MAIN_PLAYER ? GISTOGRAM.MAIN_COLOR : otherPlayersColor;
-
-  renderText(ctx, time, columnX, columnY - GISTOGRAM.INNER_GAP);
-  renderRectangle(ctx, columnX, columnY, GISTOGRAM.COLUMN_WIDTH, height, color);
-  renderText(ctx, name, columnX, columnY + height + GISTOGRAM.INNER_GAP);
-};
-
-var getMaxElement = function (array) {
-  var maxElement = array[0];
-  for (var i = 0; i < array.length; i++) {
-    if (array[i] > maxElement) {
-      maxElement = array[i];
+  var getMaxElement = function (array) {
+    var maxElement = array[0];
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] > maxElement) {
+        maxElement = array[i];
+      }
     }
-  }
-  return maxElement;
-};
+    return maxElement;
+  };
 
-// eslint-disable-next-line
-var renderStatistics = function (ctx, names, times) {
-  var shadowX = END_MODAL.START_X + END_MODAL.SHADOW_OFFSET;
-  var shadowY = END_MODAL.START_Y + END_MODAL.SHADOW_OFFSET;
-  var maxElement = getMaxElement(times);
+  // eslint-disable-next-line
+  window.renderStatistics = function (ctx, names, times) {
+    var shadowX = CONST.END_MODAL.START_X + CONST.END_MODAL.SHADOW_OFFSET;
+    var shadowY = CONST.END_MODAL.START_Y + CONST.END_MODAL.SHADOW_OFFSET;
+    var maxElement = getMaxElement(times);
 
-  renderModal(ctx, shadowX, shadowY, END_MODAL.SHADOW_COLOR);
-  renderModal(ctx, END_MODAL.START_X, END_MODAL.START_Y, END_MODAL.BACKGORUND_COLOR);
+    renderModal(ctx, shadowX, shadowY, CONST.END_MODAL.SHADOW_COLOR);
+    renderModal(ctx, CONST.END_MODAL.START_X, CONST.END_MODAL.START_Y, CONST.END_MODAL.BACKGORUND_COLOR);
 
-  renderText(ctx, 'Ура вы победили!', END_MODAL.START_X + END_MODAL.INNER_GAP, END_MODAL.START_Y + END_MODAL.INNER_GAP);
-  renderText(ctx, 'Список результатов:', END_MODAL.START_X + END_MODAL.INNER_GAP, 60);
+    renderText(ctx, 'Ура вы победили!', CONST.END_MODAL.START_X + CONST.END_MODAL.INNER_GAP, CONST.END_MODAL.START_Y + CONST.END_MODAL.INNER_GAP);
+    renderText(ctx, 'Список результатов:', CONST.END_MODAL.START_X + CONST.END_MODAL.INNER_GAP, 60);
 
-  for (var i = 0; i < names.length; i++) {
-    var rate = times[i] / maxElement;
-    var roundedTime = Math.floor(times[i]);
-    renderGistogramColumn(ctx, rate, i, names[i], roundedTime);
-  }
-};
+    for (var i = 0; i < names.length; i++) {
+      var rate = times[i] / maxElement;
+      var roundedTime = Math.floor(times[i]);
+      renderGistogramColumn(ctx, rate, i, names[i], roundedTime);
+    }
+  };
+})();
+
