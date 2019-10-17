@@ -1,6 +1,8 @@
 'use strict';
 (function () {
   var CONST = window.CONST;
+  var backend = window.backend;
+  var utils = window.utils;
 
   var userDialog = document.querySelector('.setup');
   var userDialogOpen = document.querySelector('.setup-open');
@@ -108,5 +110,15 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  var hidePopup = function () {
+    userDialog.classList.add('hidden');
+  };
+
+  var form = userDialog.querySelector('.setup-wizard-form');
+  form.addEventListener('submit', function (evt) {
+    backend.upload(new FormData(form), hidePopup, utils.errorHandler);
+    evt.preventDefault();
   });
 })();

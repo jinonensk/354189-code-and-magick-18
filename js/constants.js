@@ -24,26 +24,6 @@
   };
   var FONT_STYLE = '16px PT Mono';
   var FONT_BASELINE = 'middle';
-  var FIRST_NAMES = [
-    'Иван',
-    'Хуан Себастьян',
-    'Мария',
-    'Кристоф',
-    'Виктор',
-    'Юлия',
-    'Люпита',
-    'Вашингтон'
-  ];
-  var LAST_NAMES = [
-    'да Марья',
-    'Верон',
-    'Мирабелла',
-    'Вальц',
-    'Онопко',
-    'Топольницкая',
-    'Нионго',
-    'Ирвинг'
-  ];
   var COAT_COLORS = [
     'rgb(101, 137, 164)',
     'rgb(241, 43, 107)',
@@ -73,14 +53,15 @@
   ];
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var URL_UPLOAD = 'https://js.dump.academy/code-and-magick';
+  var URL_LOAD = 'https://js.dump.academy/code-and-magick/data';
+  var XHR_TIMEOUT = 1000 * 10; // 10 s
 
   window.CONST = {
     END_MODAL: END_MODAL,
     GISTOGRAM: GISTOGRAM,
     FONT_STYLE: FONT_STYLE,
     FONT_BASELINE: FONT_BASELINE,
-    FIRST_NAMES: FIRST_NAMES,
-    LAST_NAMES: LAST_NAMES,
     COAT_COLORS: COAT_COLORS,
     EYES_COLORS: EYES_COLORS,
     WIZARDS_QUANTITY: WIZARDS_QUANTITY,
@@ -88,5 +69,8 @@
     FIREBALL_COLORS: FIREBALL_COLORS,
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
+    URL_UPLOAD: URL_UPLOAD,
+    URL_LOAD: URL_LOAD,
+    XHR_TIMEOUT: XHR_TIMEOUT,
   };
 })();
