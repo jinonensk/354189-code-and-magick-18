@@ -27,6 +27,6 @@
     similarListElement.appendChild(fragment);
   };
 
-  backend.load(addWizardsToPage, utils.errorHandler);
+  backend.load(addWizardsToPage);
   document.querySelector('.setup-similar').classList.remove('hidden');
 })();

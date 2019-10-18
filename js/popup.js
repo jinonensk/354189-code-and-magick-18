@@ -2,7 +2,6 @@
 (function () {
   var CONST = window.CONST;
   var backend = window.backend;
-  var utils = window.utils;
 
   var userDialog = document.querySelector('.setup');
   var userDialogOpen = document.querySelector('.setup-open');
@@ -118,7 +117,7 @@
 
   var form = userDialog.querySelector('.setup-wizard-form');
   form.addEventListener('submit', function (evt) {
-    backend.upload(new FormData(form), hidePopup, utils.errorHandler);
+    backend.upload(new FormData(form), hidePopup);
     evt.preventDefault();
   });
 })();

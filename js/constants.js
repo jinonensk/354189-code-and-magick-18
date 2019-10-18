@@ -56,6 +56,7 @@
   var URL_UPLOAD = 'https://js.dump.academy/code-and-magick';
   var URL_LOAD = 'https://js.dump.academy/code-and-magick/data';
   var XHR_TIMEOUT = 1000 * 10; // 10 s
+  var SUCCESS_SERVER_ANSWER = 200;
 
   window.CONST = {
     END_MODAL: END_MODAL,
@@ -72,5 +73,6 @@
     URL_UPLOAD: URL_UPLOAD,
     URL_LOAD: URL_LOAD,
     XHR_TIMEOUT: XHR_TIMEOUT,
+    SUCCESS_SERVER_ANSWER: SUCCESS_SERVER_ANSWER,
   };
 })();
